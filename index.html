@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fa">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="./assets/css/style.css" />
+    <title>369 Days to 30 yo</title>
+</head>
+
+<body>
+    <div style="position: sticky;top: 0;background-color: #606264;width: 100%;z-index: 1;border-radius: 8px 8px 0 0;">
+        <div style="padding: 20px;">
+            <h1 style="direction: ltr;margin-bottom: 15px;margin-top: 3px;margin-bottom: 0;">369 Days to 30 yo</h1>
+        </div>
+    </div>
+    <div class="container">
+        <div id="checkboxes" class="font-family-medium"></div>
+    </div>
+
+    <script>
+        const TOTAL_BOXES = 369;
+        const startDate = new Date(2025, 3, 28);
+        const storageKey = 'dailyCheckboxes';
+        let checkboxStates = JSON.parse(localStorage.getItem(storageKey)) || Array(TOTAL_BOXES).fill(false);
+        const container = document.getElementById('checkboxes');
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        let todayCheckbox = null;
+        for (let i = 0; i < TOTAL_BOXES; i++) {
+            const currentDay = new Date(startDate.getTime());
+            currentDay.setDate(startDate.getDate() + i);
+            const div = document.createElement('div');
+            div.className = 'checkbox-container';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.id = `checkbox-${i}`;
+            checkbox.checked = checkboxStates[i];
+            if (currentDay.getTime() === today.getTime()) {
+                todayCheckbox = div;
+            }
+            checkbox.addEventListener('change', () => {
+                checkboxStates[i] = checkbox.checked;
+                localStorage.setItem(storageKey, JSON.stringify(checkboxStates));
+            });
+            const label = document.createElement('label');
+            label.htmlFor = checkbox.id;
+            label.textContent = `روز ${i + 1} - تاریخ : ${currentDay.toLocaleDateString('fa-IR')}`;
+            div.appendChild(checkbox);
+            div.appendChild(label);
+            container.appendChild(div);
+        }
+        if (todayCheckbox) {
+            setTimeout(() => {
+                todayCheckbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 500);
+        }
+    </script>
+</body>
+
+</html>
